@@ -32,8 +32,8 @@
         initial : "*-*-*-*-*-*",
         timeMinuteOpts : {
             minWidth  : 100, // only applies if columns and itemWidth not set
-            itemWidth : 20,
-            columns   : 4,
+            itemWidth : 10,
+            columns   : 5,
             rows      : undefined,
             title     : "Time: Minute"
         },
@@ -61,7 +61,7 @@
         url_set : undefined,
         customValues : undefined,
         onChange: undefined,
-        useGentleSelect: false
+        useGentleSelect: true
     };
 
     // - functions to render options fields - needed mods to perform start < stop checks
@@ -108,7 +108,7 @@
 		"always" : /^(\*\-){5}\*$/,                    // "*-*-*-*-*-*"
 		"day"    : /^(\*\-){4}\d{1,2}\-\d{1,2}$/,      // "*-*-*-*-?-?"
 		"time"   : /^(\d{1,2}\-){4},\*\-\*$/,          // "?-?-?-?-*-*"
-		"custom" : /^(\d{1,2}\-){5}\d{1,2}$/          // "?-?-?-?-?-?"
+		"custom" : /^(\d{1,2}\-){5}\d{1,2}$/           // "?-?-?-?-?-?"
     };
 
     // --------- private funcs ---------
@@ -130,7 +130,7 @@
         }
 
         // check format of initial day-time window
-        var valid_window = /^((\d{1,2}|\*)\s){5}(\d{1,2}|\*)$/
+        var valid_window = /^((\d{1,2}|\*)\-){5}(\d{1,2}|\*)$/
         if (typeof window_str != "string" || !valid_window.test(window_str)) {
             $.error("cron: invalid initial value");
             return undefined;
@@ -223,14 +223,11 @@
             var options = opts ? opts : {}; /* default to empty obj */
             var o = $.extend([], defaults, options);
             var eo = $.extend({}, defaults.effectOpts, options.effectOpts);
-            /*$.extend(o, {
-                minuteOpts     : $.extend({}, defaults.minuteOpts, eo, options.minuteOpts),
-                domOpts        : $.extend({}, defaults.domOpts, eo, options.domOpts),
-                monthOpts      : $.extend({}, defaults.monthOpts, eo, options.monthOpts),
-                dowOpts        : $.extend({}, defaults.dowOpts, eo, options.dowOpts),
+            $.extend(o, {
+                timeMinuteOpts : $.extend({}, defaults.timeMinuteOpts, eo, options.timeMinuteOpts),
                 timeHourOpts   : $.extend({}, defaults.timeHourOpts, eo, options.timeHourOpts),
-                timeMinuteOpts : $.extend({}, defaults.timeMinuteOpts, eo, options.timeMinuteOpts)
-            });*/ // no custom
+                dowOpts        : $.extend({}, defaults.dowOpts, eo, options.dowOpts)
+            });
 
             // error checking
             if (hasError(this, o)) { return this; }
@@ -245,7 +242,7 @@
             }
 
             block["rangewindow"] = $("<span class='cron-period'>"
-                    + "Task execution window: <select name='cron-window'>" + custom_windows
+                    + "<select name='cron-window'>" + custom_windows
                     + str_opt_timewindow + "</select> </span>")
                 .appendTo(this)
                 .data("root", this);
@@ -256,9 +253,9 @@
             if (o.useGentleSelect) select.gentleSelect(eo);
 
             block["time-start"] = $("<span class='cron-block cron-block-time'>"
-                    + " Time window (From) <select name='cron-time-hour-start' class='cron-time-hour'>" + str_opt_hid
-                    + "</select>:<select name='cron-time-min-start' class='cron-time-min'>" + str_opt_mih
-                    + "</select></span>")
+                    + " Time <select name='cron-time-hour-start' class='cron-time-hour-start'>" + str_opt_hid
+                    + "</select>:<select name='cron-time-min-start' class='cron-time-min-start'>" + str_opt_mih
+                    + " </span>")
                 .appendTo(this)
                 .data("root", this);
 
@@ -268,9 +265,9 @@
             if (o.useGentleSelect) select.gentleSelect(o.timeMinuteOpts);
 
             block["time-stop"] = $("<span class='cron-block cron-block-time'>"
-                    + " (To) <select name='cron-time-hour-stop' class='cron-time-hour'>" + str_opt_hid
-                    + "</select>:<select name='cron-time-min-stop' class='cron-time-min'>" + str_opt_mih
-                    + "</select></span>")
+                    + " to <select name='cron-time-hour-stop' class='cron-time-hour-stop'>" + str_opt_hid
+                    + "</select>:<select name='cron-time-min-stop' class='cron-time-min-stop'>" + str_opt_mih
+                    + " </span>")
                 .appendTo(this)
                 .data("root", this);
 
@@ -280,12 +277,14 @@
             if (o.useGentleSelect) select.gentleSelect(o.timeMinuteOpts);
 			
             block["days"] = $("<span class='cron-block cron-block-dow'>"
-                    + " Days window (From) <select name='cron-days-start'>" + str_opt_dow
-                    + "</select> (To) <select name='cron-days-stop'>" + str_opt_dow + "</select></span>")
+                    + " Days <select name='cron-days-start' class='cron-days-start'>" + str_opt_dow
+                    + "</select> to <select name='cron-days-stop' class='cron-days-stop'>" + str_opt_dow + " </span>")
                 .appendTo(this)
                 .data("root", this);
 
-            select = block["days"].find("select").data("root", this);
+            select = block["days"].find("select.cron-days-start").data("root", this);
+            if (o.useGentleSelect) select.gentleSelect(o.dowOpts);
+            select = block["days"].find("select.cron-days-stop").data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.dowOpts);
 			
             block["controls"] = $("<span class='cron-controls'>&laquo; save "
@@ -346,7 +345,7 @@
                         if (useGentleSelect) btgt.gentleSelect("update");
                     }
                     if (tgt == "days") {
-                        var btgt = block[tgt].find("select.cron-days-start").val(v["day_stop"]);
+                        var btgt = block[tgt].find("select.cron-days-start").val(v["day_start"]);
                         if (useGentleSelect) btgt.gentleSelect("update");
                         btgt = block[tgt].find("select.cron-days-stop").val(v["day_stop"]);
                         if (useGentleSelect) btgt.gentleSelect("update");
