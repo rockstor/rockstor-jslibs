@@ -13,7 +13,7 @@
  *  (JS)
  *
  *  // initialise like this
- *  var c = $('#cron_window').cron_window({ });
+ *  var c = $('#cron_window').cron_window();
  *
  *  (HTML)
  *  <div id='cron_window'></div>
@@ -82,8 +82,8 @@
 
     // WEEK DAYS
     var str_opt_dow = "";
-    var days = ["Monday", "Tuesday", "Wednesday", "Thursday",
-                "Friday", "Saturday", "Sunday"];
+    var days = ["Mon", "Tue", "Wed", "Thu",
+                "Fri", "Sat", "Sun"];
     for (var i = 0; i < days.length; i++) {
         str_opt_dow += "<option value='"+i+"'>" + days[i] + "</option>\n";
     }
@@ -91,7 +91,7 @@
     // options for time windows
     var str_opt_timewindow = "";
     var windows = ["always", "day", "time", "custom"];
-	var windows_label = ["Always - no limits to task", "Days window - run only some days", "Time window - run every day, only during hours", "Custom window - manually set day/time intervals"]; // label for windows - used only for beautify text
+	var windows_label = ["Run always - no limitations", "Week days filter", "Time filter", "Custom settings"]; // label for windows - used only for beautify text
     for (var i = 0; i < windows.length; i++) {
         str_opt_timewindow += "<option value='"+windows[i]+"'>" + windows_label[i] + "</option>\n";
     }
@@ -253,7 +253,7 @@
             if (o.useGentleSelect) select.gentleSelect(eo);
 
             block["time-start"] = $("<span class='cron-block cron-block-time'>"
-                    + " Time <select name='cron-time-hour-start' class='cron-time-hour-start'>" + str_opt_hid
+                    + " from <select name='cron-time-hour-start' class='cron-time-hour-start'>" + str_opt_hid
                     + "</select>:<select name='cron-time-min-start' class='cron-time-min-start'>" + str_opt_mih
                     + " </span>")
                 .appendTo(this)
@@ -277,7 +277,7 @@
             if (o.useGentleSelect) select.gentleSelect(o.timeMinuteOpts);
 			
             block["days"] = $("<span class='cron-block cron-block-dow'>"
-                    + " Days <select name='cron-days-start' class='cron-days-start'>" + str_opt_dow
+                    + " on <select name='cron-days-start' class='cron-days-start'>" + str_opt_dow
                     + "</select> to <select name='cron-days-stop' class='cron-days-stop'>" + str_opt_dow + " </span>")
                 .appendTo(this)
                 .data("root", this);
@@ -287,17 +287,6 @@
             select = block["days"].find("select.cron-days-stop").data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.dowOpts);
 			
-            block["controls"] = $("<span class='cron-controls'>&laquo; save "
-                    + "<span class='cron-button cron-button-save'></span>"
-                    + " </span>")
-                .appendTo(this)
-                .data("root", this)
-                .find("span.cron-button-save")
-                    .bind("click.cron", event_handlers.saveClicked)
-                    .data("root", this)
-                    .end();
-
-            //this.find("select").bind("change.cron-callback", event_handlers.somethingChanged);
             this.data("options", o).data("block", block); // store options and block pointer
             this.data("current_value", o.initial); // remember base value to detect changes
 
@@ -376,56 +365,6 @@
                     block[b[i]].show();
                 }
             }
-        },
-
-        /*somethingChanged : function() {
-            root = $(this).data("root");
-            // if AJAX url defined, show "save"/"reset" button
-            if (defined(root.data("options").url_set)) {
-                if (methods.value.call(root) != root.data("current_value")) { // if changed
-                    root.addClass("cron-changed");
-                    root.data("block")["controls"].fadeIn();
-                } else { // values manually reverted
-                    root.removeClass("cron-changed");
-                    root.data("block")["controls"].fadeOut();
-                }
-            } else {
-                root.data("block")["controls"].hide();
-            }
-
-            // chain in user defined event handler, if specified
-            var oc = root.data("options").onChange;
-            if (defined(oc) && $.isFunction(oc)) {
-                oc.call(root);
-            }
-        }, */ //func not needed no ajax performed from script
-
-        saveClicked : function() {
-            var btn  = $(this);
-            var root = btn.data("root");
-            var cron_str = methods.value.call(root);
-
-            if (btn.hasClass("cron-loading")) { return; } // in progress
-            btn.addClass("cron-loading");
-
-            $.ajax({
-                type : "POST",
-                url  : root.data("options").url_set,
-                data : { "cron" : cron_str },
-                success : function() {
-                    root.data("current_value", cron_str);
-                    btn.removeClass("cron-loading");
-                    // data changed since "save" clicked?
-                    if (cron_str == methods.value.call(root)) {
-                        root.removeClass("cron-changed");
-                        root.data("block").controls.fadeOut();
-                    }
-                },
-                error : function() {
-                    alert("An error occured when submitting your request. Try again?");
-                    btn.removeClass("cron-loading");
-                }
-            });
         }
     };
 
