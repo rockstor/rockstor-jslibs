@@ -54,8 +54,8 @@
         effectOpts : {
             openSpeed      : 400,
             closeSpeed     : 400,
-            openEffect     : "slide",
-            closeEffect    : "slide",
+            openEffect     : "fade",
+            closeEffect    : "fade",
             hideOnMouseOut : true
         },
         url_set : undefined,
@@ -211,7 +211,7 @@
                 // we assume this only happens when customValues is set
                 return selectedTimeWindow;
         }
-        return [hour_start, hour_stop, min_start, min_stop, day_start, day_stop].join("-");
+        return [hour_start, min_start, hour_stop, min_stop, day_start, day_stop].join("-");
     }
 
     // -------------------  PUBLIC METHODS -----------------
@@ -276,8 +276,12 @@
                 .data("root", this);
 
             select = block["time-stop"].find("select.cron-time-hour-stop").data("root", this);
+	    select.bind("change", event_handlers.timeConventional)
+		  .data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.timeHourOpts);
             select = block["time-stop"].find("select.cron-time-min-stop").data("root", this);
+            select.bind("change", event_handlers.timeConventional)
+                  .data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.timeMinuteOpts);
 			
             block["days"] = $("<span class='cron-block cron-block-dow'>"
@@ -291,8 +295,17 @@
                   .data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.dowOpts);
             select = block["days"].find("select.cron-days-stop").data("root", this);
+            select.bind("change", event_handlers.timeConventional)
+                  .data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.dowOpts);
-			
+	    //block added to show/hide warning for start > stop
+	    block["warning"] = $("<i class='fa fa-exclamation-triangle' title='Detected unconventional time format, sure about that?" +
+		    " check before submit\nStop timing is lower than Start timing\n" +
+		    "Conventional time format: 0900 1500 Mon Fri\n" +
+		    "Unconventional time format: 1300 0900 Sun Tue'></i>")
+                .appendTo(this)
+                .data("root", this);
+	    block["warning"].hide();		
             this.data("options", o).data("block", block); // store options and block pointer
             this.data("current_value", o.initial); // remember base value to detect changes
 
@@ -317,10 +330,10 @@
                 var v = {
                     "hour_start" : d[0],
                     "min_start"  : d[1],
-                    "hour_start" : d[2],
-                    "hour_stop"  : d[3],
+                    "hour_stop " : d[2],
+                    "min_stop"   : d[3],
                     "day_start"  : d[4],
-					"day_stop"   : d[5]
+		    "day_stop"   : d[5]
                 };
 
                 // update appropriate select boxes
@@ -374,8 +387,7 @@
         },
         timedaysChanged : function() {   // on start hour time day changed apply values to stop fields
             var root = $(this).data("root");
-            var block = root.data("block"),
-                opt = root.data("options");
+            var block = root.data("block");
 	    var stop_hour = stop_min = stop_day = 0;
 	    var listen_changes = $(this).val();
 
@@ -389,7 +401,14 @@
 	if ($(this).is(".cron-time-hour-start")) { // set stop hour >= start hour and checks next hour prev hour
 		stop_hour = parseInt($(this).val());
                 var stop_min = parseInt(block["time-start"].find("select.cron-time-min-start").val());
-		if (stop_min==59) { stop_hour++;  }
+		if (stop_min==59) {
+			stop_hour++;  
+		} else {
+			stop_min++;
+		}
+                var minstop = block["time-stop"].find("select.cron-time-min-stop").val(stop_min);
+                minstop.gentleSelect("update");
+                minstop.trigger("change");
 		var hourstop = block["time-stop"].find("select.cron-time-hour-stop").val(stop_hour);
                 hourstop.gentleSelect("update");
                 hourstop.trigger("change");
@@ -411,7 +430,28 @@
             	hourstop.gentleSelect("update");
             	hourstop.trigger("change");
             }
-        }
+        },
+	timeConventional : function() {   // check if stop > start
+            	var root = $(this).data("root");
+            	var block = root.data("block");
+		var current_value = getCurrentValue(root);
+		var d = current_value.split("-");
+		d[0] = (d[0]=="*") ? 0 : parseInt(d[0]);  // convert vals to int to check timings
+		d[1] = (d[1]=="*") ? 0 : parseInt(d[1]);
+		d[2] = (d[2]=="*") ? 23 : parseInt(d[2]);
+		d[3] = (d[3]=="*") ? 59 : parseInt(d[3]);
+		d[4] = (d[4]=="*") ? 0 : parseInt(d[4]);
+		d[5] = (d[5]=="*") ? 6 : parseInt(d[5]);
+		var time_start = d[0]*60 + d[1]; // all to mins
+		var time_stop = d[2]*60 + d[3]; // all to mins
+		var day_start = d[4];
+		var day_stop = d[5];
+		if ((time_start < time_stop) && (day_start <= day_stop)) {
+			block["warning"].hide(500);
+		} else {
+			block["warning"].show(500);
+		}
+	}
     };
 
     $.fn.cron_window = function(method) {
