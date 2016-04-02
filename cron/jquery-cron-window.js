@@ -33,23 +33,23 @@
         timeMinuteOpts : {
             minWidth  : 100, // only applies if columns and itemWidth not set
             itemWidth : 10,
-            columns   : 5,
+            columns   : 8,
             rows      : undefined,
-            title     : "Time: Minute"
+            title     : "Time: Select Minute"
         },
         timeHourOpts : {
             minWidth  : 100, // only applies if columns and itemWidth not set
-            itemWidth : 20,
-            columns   : 2,
+            itemWidth : 10,
+            columns   : 6,
             rows      : undefined,
-            title     : "Time: Hour"
+            title     : "Time: Select Hour"
         },
         dowOpts : {
             minWidth  : 100, // only applies if columns and itemWidth not set
-            itemWidth : undefined,
-            columns   : undefined,
+            itemWidth : 10,
+            columns   : 3,
             rows      : undefined,
-            title     : undefined
+            title     : "Week: Select Day"
         },
         effectOpts : {
             openSpeed      : 400,
