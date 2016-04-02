@@ -259,9 +259,13 @@
                 .appendTo(this)
                 .data("root", this);
 
-            select = block["time-start"].find("select.cron-time-hour-start").data("root", this);
+            select = block["time-start"].find("select.cron-time-hour-start");
+            select.bind("change", event_handlers.timedaysChanged)
+                  .data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.timeHourOpts);
-            select = block["time-start"].find("select.cron-time-min-start").data("root", this);
+            select = block["time-start"].find("select.cron-time-min-start");
+            select.bind("change", event_handlers.timedaysChanged)
+                  .data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.timeMinuteOpts);
 
             block["time-stop"] = $("<span class='cron-block cron-block-time'>"
@@ -282,7 +286,9 @@
                 .appendTo(this)
                 .data("root", this);
 
-            select = block["days"].find("select.cron-days-start").data("root", this);
+            select = block["days"].find("select.cron-days-start");
+            select.bind("change", event_handlers.timedaysChanged)
+                  .data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.dowOpts);
             select = block["days"].find("select.cron-days-stop").data("root", this);
             if (o.useGentleSelect) select.gentleSelect(o.dowOpts);
@@ -364,6 +370,46 @@
                 for (var i = 0; i < b.length; i++) {
                     block[b[i]].show();
                 }
+            }
+        },
+        timedaysChanged : function() {   // on start hour time day changed apply values to stop fields
+            var root = $(this).data("root");
+            var block = root.data("block"),
+                opt = root.data("options");
+	    var stop_hour = stop_min = stop_day = 0;
+	    var listen_changes = $(this).val();
+
+        if ($(this).is(".cron-days-start")) { // set stop day >= start day
+                stop_day = parseInt($(this).val());
+                var daystop = block["days"].find("select.cron-days-stop").val(stop_day);
+                daystop.gentleSelect("update");
+                daystop.trigger("change");
+            }
+
+	if ($(this).is(".cron-time-hour-start")) { // set stop hour >= start hour and checks next hour prev hour
+		stop_hour = parseInt($(this).val());
+                var stop_min = parseInt(block["time-start"].find("select.cron-time-min-start").val());
+		if (stop_min==59) { stop_hour++;  }
+		var hourstop = block["time-stop"].find("select.cron-time-hour-stop").val(stop_hour);
+                hourstop.gentleSelect("update");
+                hourstop.trigger("change");
+            }
+
+        if ($(this).is(".cron-time-min-start")) { // set stop min > start min - if min = 59 move to hour+1 min=0 and check for inversion
+                stop_min = parseInt($(this).val());
+		var stop_hour = parseInt(block["time-start"].find("select.cron-time-hour-start").val());
+                if (stop_min<59) {
+	            	stop_min++;
+	        } else {
+			stop_min=0;
+			stop_hour += (stop_hour < 23) ? 1 : 0;
+		}
+		var minstop = block["time-stop"].find("select.cron-time-min-stop").val(stop_min);
+            	minstop.gentleSelect("update");
+            	minstop.trigger("change");
+            	var hourstop = block["time-stop"].find("select.cron-time-hour-stop").val(stop_hour);
+            	hourstop.gentleSelect("update");
+            	hourstop.trigger("change");
             }
         }
     };
