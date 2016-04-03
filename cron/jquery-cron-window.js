@@ -30,6 +30,8 @@
 
     var defaults = {
         initial : "*-*-*-*-*-*",
+	cron_monitor : "cron-period",
+	excluded_crons : ["day", "week", "month", "year"],
         timeMinuteOpts : {
             minWidth  : 100, // only applies if columns and itemWidth not set
             itemWidth : 10,
@@ -306,9 +308,12 @@
                 .appendTo(this)
                 .data("root", this);
 	    block["warning"].hide();		
+
             this.data("options", o).data("block", block); // store options and block pointer
             this.data("current_value", o.initial); // remember base value to detect changes
-
+	    var monit = $("select[name=" + o.cron_monitor + "]");
+	    monit.bind("change", function() { event_handlers.checkCron.call(this, o) }); //add monitor on task cron select changes
+	    monit.trigger("change");
             return methods["value"].call(this, o.initial); // set initial value
         },
 
@@ -376,7 +381,7 @@
             var block = root.data("block"),
                 opt = root.data("options");
             var period = $(this).val();
-
+	    if (period == "always") { block["warning"].hide(500); } // always hide warning on "always" task window
             root.find("span.cron-block").hide(); // first, hide all blocks
             if (toDisplay.hasOwnProperty(period)) { // not custom value
                 var b = toDisplay[$(this).val()];
@@ -431,7 +436,7 @@
             	hourstop.trigger("change");
             }
         },
-	timeConventional : function() {   // check if stop > start
+	timeConventional : function() {   // checks if stop > start and shows warning
             	var root = $(this).data("root");
             	var block = root.data("block");
 		var current_value = getCurrentValue(root);
@@ -450,6 +455,17 @@
 			block["warning"].hide(500);
 		} else {
 			block["warning"].show(500);
+		}
+	},
+	checkCron : function(opts) {   // checks for cron task value, if different from minute/x minutes/hour hide task window exec div
+		var cron_selected = $(this).val();
+		var excluded_crons = opts.excluded_crons;
+		var currentdiv = $("#cron-window");
+		if (excluded_crons.indexOf(cron_selected) > -1){
+		currentdiv.slideUp();
+		currentdiv.cron_window("value","*-*-*-*-*-*"); // if cron not in minute/x minutes/hour reset task window to default "always"
+		} else {
+		currentdiv.slideDown();
 		}
 	}
     };
