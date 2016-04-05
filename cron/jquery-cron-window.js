@@ -109,7 +109,7 @@
     var combinations = {                               // from cron plugin changed to match exec windows (6 chars)
 		"always" : /^(\*\-){5}\*$/,                    // "*-*-*-*-*-*"
 		"day"    : /^(\*\-){4}\d{1,2}\-\d{1,2}$/,      // "*-*-*-*-?-?"
-		"time"   : /^(\d{1,2}\-){4},\*\-\*$/,          // "?-?-?-?-*-*"
+		"time"   : /^(\d{1,2}\-){4}\*\-\*$/,          // "?-?-?-?-*-*"
 		"custom" : /^(\d{1,2}\-){5}\d{1,2}$/           // "?-?-?-?-?-?"
     };
 
@@ -158,7 +158,7 @@
         }
 
         // unknown combination
-        $.error("Cron window: valid but unsupported window format. sorry.");
+        $.error("Cron window: "+window_str+" valid but unsupported window format. sorry.");
         return undefined;
     }
 
@@ -335,7 +335,7 @@
                 var v = {
                     "hour_start" : d[0],
                     "min_start"  : d[1],
-                    "hour_stop " : d[2],
+                    "hour_stop"  : d[2],
                     "min_stop"   : d[3],
                     "day_start"  : d[4],
 		    "day_stop"   : d[5]
