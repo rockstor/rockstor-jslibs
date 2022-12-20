@@ -4,7 +4,7 @@
  * http://shawnchin.github.com/jquery-cron
  *
  * Created by Mirko Arena for Rockstor BTRFS Storage System.
- * Licensed under the GPL Version 2 license.
+ * SPDX-License-Identifier: GPL-3.0-or-later
  *
  * Requires:
  * - jQuery
