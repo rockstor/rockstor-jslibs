@@ -58,14 +58,6 @@ This can lead to a discrepancy between website link license (latest) and the fil
 ├── humanize.js                       `SPDX-License-Identifier: MIT` https://github.com/HubSpot/humanize  
 ├── jquery-1.9.1.min.js               `SPDX-License-Identifier: MIT` https://github.com/jquery/jquery  
 ├── jquery.dataTables.min.js          `SPDX-License-Identifier: MIT` https://datatables.net/  
-├── jquery.flot.axislabels.js         `SPDX-License-Identifier: MIT` https://github.com/flot/flot  
-├── jquery.flot.js                    `SPDX-License-Identifier: MIT` https://github.com/flot/flot  
-├── jquery.flot.navigate.js           `SPDX-License-Identifier: MIT` https://github.com/flot/flot  
-├── jquery.flot.resize.js             `SPDX-License-Identifier: MIT` https://github.com/flot/flot  
-├── jquery.flot.stack.js              `SPDX-License-Identifier: MIT` https://github.com/flot/flot  
-├── jquery.flot.stackpercent.js       `SPDX-License-Identifier: MIT` https://github.com/flot/flot  
-├── jquery.flot.time.js               `SPDX-License-Identifier: MIT` https://github.com/flot/flot  
-├── jquery.flot.tooltip_0.5.js        `SPDX-License-Identifier: MIT` https://github.com/krzysu/flot.tooltip  
 ├── jquery.i18n..
 │    ├── CLDRPluralRuleParser.js      `SPDX-License-Identifier: MIT` https://github.com/santhoshtr/CLDRPluralRuleParser  
 │    ├── jquery.i18n.emitter.bidi.js  `SPDX-License-Identifier: (MIT OR GPL-2.0-or-later)` https://github.com/wikimedia/jquery.i18n  
