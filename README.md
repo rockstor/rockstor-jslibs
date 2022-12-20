@@ -80,7 +80,6 @@ This can lead to a discrepancy between website link license (latest) and the fil
 ├── jquery.touch-punch.min.js         `SPDX-License-Identifier: (MIT OR GPL-2.0-or-later)` https://github.com/furf/jquery-ui-touch-punch  
 ├── jquery-ui.min.js                  `SPDX-License-Identifier: MIT` https://github.com/jquery/jquery-ui  
 ├── jquery.validate.js                `SPDX-License-Identifier: (MIT OR GPL)` https://github.com/jquery-validation/jquery-validation  
-├── json2.js                          *unlicensed* https://github.com/douglascrockford/JSON-js  
 ├── jsonform.js                       `SPDX-License-Identifier: (MIT OR GPL-2.0-or-later)` https://github.com/milfont/jsonform  
 ├── later.min.js                      `SPDX-License-Identifier: MIT` https://github.com/bunkat/later  
 ├── moment.min.js                     `SPDX-License-Identifier: MIT` https://github.com/moment/moment/  
