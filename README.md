@@ -43,7 +43,6 @@ This can lead to a discrepancy between website link license (latest) and the fil
 │        ├── jquery-cron.css  
 │        ├── jquery-cron.js           `SPDX-License-Identifier: (MIT or  GPL-2.0-or-later)` https://github.com/shawnchin/jquery-cron  
 │        └── jquery-cron-window.js    `SPDX-License-Identifier: GPL-3.0-or-later` https://github.com/rockstor/rockstor-jslibs/blob/master/cron/jquery-cron-window.js  
-├── cubism.v1.js                      `SPDX-License-Identifier: Apache-2.0` https://github.com/square/cubism  
 ├── d3-tip.js                         `SPDX-License-Identifier: MIT` https://github.com/Caged/d3-tip  
 ├── d3.v3.min.js                      `SPDX-License-Identifier: ISC` https://github.com/d3/d3  
 ├── DataTables-addons  
