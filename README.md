@@ -15,7 +15,7 @@ Foundation.
 
 As such this repository, overall, has the license identifier:
 
-`SPDX-License-Identifier: (MIT AND GPL-2.0-or-later AND Apache-2.0 AND GPL-3.0-or-later AND LGPL-3.0-or-later AND BSD-3-Clause AND ISC)`
+`SPDX-License-Identifier: (MIT AND Apache-2.0 AND GPL-3.0-or-later AND LGPL-3.0-or-later AND ISC)`
 
 All of which are both FSF Free/Libre, & OSI approved according to:
 [SPDX License List](https://spdx.org/licenses/)
@@ -74,7 +74,6 @@ This can lead to a discrepancy between website link license (latest) and the fil
 │        └── it.json  
 ├── jquery-migrate-1.2.1.min.js       `SPDX-License-Identifier: MIT` https://github.com/jquery/jquery-migrate  
 ├── jquery.shapeshift.js              `SPDX-License-Identifier: MIT` https://github.com/AshesOfOwls/jquery.shapeshift  
-├── jquery.sparkline.min.js           `SPDX-License-Identifier: BSD-3-Clause` https://github.com/gwatts/jquery.sparkline/  
 ├── jquery.tablesorter.js             `SPDX-License-Identifier: (MIT OR GPL-1.0-or-later)` https://github.com/Mottie/tablesorter  
 ├── jquery.tools.min.js               `SPDX-License-Identifier: MIT` https://github.com/jquerytools/jquerytools  
 ├── jquery.touch-punch.min.js         `SPDX-License-Identifier: (MIT OR GPL-2.0-or-later)` https://github.com/furf/jquery-ui-touch-punch  
