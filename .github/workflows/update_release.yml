@@ -1,0 +1,33 @@
+name: Create release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+        description: version without release
+        type: string
+      target_branch:
+        required: true
+        description: branch to target when creating the release
+        type: string
+jobs:
+  create-release:
+    name: Create a release based on version received
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout jslibs
+        id: checkout-jslibs
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.target_branch }}
+      - name: Create release on rockstor/rockstor-jslibs
+        id: create-jslibs-release
+        run: |
+          gh release create ${{ inputs.version }} \
+          --notes "Tagging for next rockstor-core release." \
+          --title "${{ inputs.version }}" \
+          --target ${{ inputs.target_branch }}

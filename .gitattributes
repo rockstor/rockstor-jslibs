@@ -1,0 +1,5 @@
+# Exclude git config files from the generated tarball
+.git*   export-ignore
+
+# Exclude .github files
+.github/**  export-ignore
