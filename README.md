@@ -89,5 +89,6 @@ This can lead to a discrepancy between website link license (latest) and the fil
 │        └── js  
 │            └── select2.min.js       `SPDX-License-Identifier: MIT` https://github.com/select2/select2  
 ├── simple-slider.min.js              `SPDX-License-Identifier: MIT` https://github.com/ruyadorno/simple-slider  
-├── socket.io.min.js                  `SPDX-License-Identifier: MIT` https://github.com/socketio/socket.io-client  
+├── socket.io.min.js                  `SPDX-License-Identifier: MIT` https://github.com/socketio/socket.io-client
+├── socket.io.min.js.map
 └── underscore.js                     `SPDX-License-Identifier: MIT` https://github.com/jashkenas/underscore  
